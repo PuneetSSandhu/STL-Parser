@@ -34,14 +34,29 @@ def main():
     #generate random colors for the faces
     faces = parse_stl(sys.argv[1])
     for i in range(len(faces)):
-            colors.append((np.random.random(), np.random.random(), np.random.random()))
+            colors.append((255/(i+1),255/(i+1),255/(i+1)))
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    glRotatef(1, 0, 1, 0)
+                if event.key == pygame.K_RIGHT:
+                    glRotatef(-1, 0, 1, 0)
+                if event.key == pygame.K_UP:
+                    glRotatef(1, 1, 0, 0)
+                if event.key == pygame.K_DOWN:
+                    glRotatef(-1, 1, 0, 0)
+                # zoom out
+                if event.key == pygame.K_z:
+                    glTranslatef(0,0,1)
+                # zoom in
+                if event.key == pygame.K_x:
+                    glTranslatef(0,0,-1)
+                
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         draw_stl(sys.argv[1])
         pygame.display.flip()
