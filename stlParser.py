@@ -24,7 +24,6 @@ def parse_stl(file_name):
                 nums = line.split()[1:]
                 p3 = p(nums[0], nums[1], nums[2])
                 faces.append(f(p1, p2, p3, normal))
-                print(normal)
             line = stl.readline()
     return faces
 
@@ -34,8 +33,7 @@ def parse_stl(file_name):
 if __name__ == '__main__':
     # take command line argument
     if len(sys.argv) != 2:
-        print("Usage: python stlParser.py <file_name>")
+        print("Usage: python3 stlParser.py <file_name>")
         exit(1)
     file_name = sys.argv[1]
     faces = parse_stl(file_name)
-    print("Done!")
