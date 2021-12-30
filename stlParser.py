@@ -27,9 +27,6 @@ def parse_stl(file_name):
             line = stl.readline()
     return faces
 
-
-
-
 if __name__ == '__main__':
     # take command line argument
     if len(sys.argv) != 2:

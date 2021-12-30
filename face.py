@@ -13,3 +13,9 @@ class face:
         Get the normal vector of the face
         """
         return self.normal
+
+    def vertices(self):
+        """
+        Get the vertices of the face
+        """
+        return (self.p1.get_tuples(), self.p2.get_tuples(), self.p3.get_tuples())

@@ -7,6 +7,9 @@ class point:
         self.y = float(y)
         self.z = float(z)
     
+    def get_tuples (self):
+        return (self.x, self.y, self.z)
+
     def __str__ (self):
         return "({}, {}, {})".format(self.x, self.y, self.z)
 

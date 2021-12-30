@@ -4,15 +4,20 @@ import sys
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from stlParser import *
+import numpy as np
 
+colors = []
 
 def draw_stl(file_name):
     faces = parse_stl(file_name)
-    for face in faces:
+
+    for face, color in zip(faces, colors):
         glBegin(GL_POLYGON)
         glNormal3f(face.normal.x, face.normal.y, face.normal.z)
-        for vertex in face.vertices:
-            glVertex3f(vertex.x, vertex.y, vertex.z)
+        for vertex in face.vertices():
+            glVertex3f(vertex[0], vertex[1], vertex[2])
+            #make the face a random shade of red
+            glColor3f(color[0], color[1], color[2])
         glEnd()
 
 def main():
@@ -22,9 +27,14 @@ def main():
 
     gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
 
-    glTranslatef(0.0,0.0, -5)
+    glTranslatef(0,0, -50)
 
-    glRotatef(0, 0, 0, 0)
+    glRotatef(90, 0,10,10)
+
+    #generate random colors for the faces
+    faces = parse_stl(sys.argv[1])
+    for i in range(len(faces)):
+            colors.append((np.random.random(), np.random.random(), np.random.random()))
 
     while True:
         for event in pygame.event.get():
@@ -34,7 +44,7 @@ def main():
 
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         draw_stl(sys.argv[1])
-        pygame.display.update()
+        pygame.display.flip()
         pygame.time.wait(10)
 
 
