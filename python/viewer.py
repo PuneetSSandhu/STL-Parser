@@ -24,19 +24,27 @@ def main():
     pygame.init()
     display = (800,600)
     pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
+    glMatrixMode(GL_PROJECTION)
+    gluPerspective(90, (display[0]/display[1]), 0.1, 500.0)
 
-    gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
+    glMatrixMode(GL_MODELVIEW)
+    glTranslatef(0, 0, -100)
+    glRotatef(0, 0, 0, 0)
 
-    glTranslatef(0,0, -50)
+    glLight(GL_LIGHT0, GL_POSITION,  (0, 0, 1, 0)) # directional light from the front
+    # glLight(GL_LIGHT0, GL_POSITION,  (5, 5, 5, 1)) # point light from the left, top, front
+    glLightfv(GL_LIGHT0, GL_AMBIENT, (0, 0, 0, 1))
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, (1, 1, 1, 1))
 
-    glRotatef(90, 0,10,10)
 
     #generate random colors for the faces
     faces = parse_stl(sys.argv[1])
     for i in range(len(faces)):
-            colors.append((255/(i+1),255/(i+1),255/(i+1)))
+            colors.append((1,1,255-255*i/len(faces), 1))
 
     while True:
+        # draw the x,y,z axes
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -56,9 +64,20 @@ def main():
                 # zoom in
                 if event.key == pygame.K_x:
                     glTranslatef(0,0,-1)
-                
+
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+
+
+        glEnable(GL_LIGHTING)
+        glEnable(GL_LIGHT0)
+        glEnable(GL_COLOR_MATERIAL)
+        glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE )
+
         draw_stl(sys.argv[1])
+
+        glDisable(GL_LIGHT0)
+        glDisable(GL_LIGHTING)
+        glDisable(GL_COLOR_MATERIAL)
         pygame.display.flip()
         pygame.time.wait(10)
 
