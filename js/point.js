@@ -13,4 +13,10 @@ class point {
             z: this.z
         };
     }
+
+    toString() {
+        return this.x + " " + this.y + " " + this.z;
+    }   
 }
+
+module.exports = point;

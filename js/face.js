@@ -14,3 +14,5 @@ class Face {
         return this.p1.toString() + " " + this.p2.toString() + " " + this.p3.toString() + " " + this.normal.toString();
     }
 }
+
+module.exports = Face;
