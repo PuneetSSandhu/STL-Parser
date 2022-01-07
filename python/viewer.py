@@ -8,8 +8,17 @@ import numpy as np
 
 colors = []
 
+
+def get_faces(file_name):
+    if sys.argc < 3:
+        faces = parse_stl(file_name)
+    else:
+        faces = bin_parse_stl(file_name)
+    return faces
+
+
 def draw_stl(file_name):
-    faces = parse_stl(file_name)
+    faces = get_faces(file_name)
 
     for face, color in zip(faces, colors):
         glBegin(GL_POLYGON)
@@ -19,6 +28,7 @@ def draw_stl(file_name):
             #make the face a random shade of red
             glColor3f(color[0], color[1], color[2])
         glEnd()
+
 
 def main():
     pygame.init()
@@ -38,7 +48,7 @@ def main():
 
 
     #generate random colors for the faces
-    faces = parse_stl(sys.argv[1])
+    faces = get_faces(sys.argv[1])
     for i in range(len(faces)):
             colors.append((1,1,255-255*i/len(faces), 1))
 
@@ -85,8 +95,8 @@ def main():
 
 if __name__ == '__main__':
     # take command line argument
-    if len(sys.argv) != 2:
-        print("Usage: python3 viewer.py <file_name>")
+    if len(sys.argv) < 3:
+        print("Usage: python3 viewer.py <file_name> <binary>")
         exit(1)
     main()
     print("Done!")
