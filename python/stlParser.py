@@ -2,6 +2,7 @@
 from point import point as p
 from face import face as f
 import sys
+import struct
 
 """
 Given a file name, parse the STL file and return a list of faces.
@@ -39,12 +40,13 @@ def bin_parser_stl(file_name):
         num_triangles = stl.read(4)
         num_triangles = int.from_bytes(num_triangles, byteorder='little')
         for i in range(num_triangles):
-            normal = stl.read(12)
-            p1 = stl.read(12)
-            p2 = stl.read(12)
-            p3 = stl.read(12)
+            normal =  struct.unpack('3f', stl.read(12))
+            p1 = struct.unpack('3f', stl.read(12))
+            p2 =  struct.unpack('3f', stl.read(12))
+            p3 =  struct.unpack('3f', stl.read(12))
             stl.read(2)
-            faces.append(f(p1, p2, p3, normal))
+
+            faces.append(f(p(p1[0], p1[1], p1[2]), p(p2[0], p2[1], p2[2]), p(p3[0], p3[1], p3[2]), p(normal[0], normal[1], normal[2])))
     return faces
 
 if __name__ == '__main__':

@@ -10,10 +10,10 @@ colors = []
 
 
 def get_faces(file_name):
-    if sys.argc < 3:
+    if len(sys.argv) < 3:
         faces = parse_stl(file_name)
     else:
-        faces = bin_parse_stl(file_name)
+        faces = bin_parser_stl(file_name)
     return faces
 
 
