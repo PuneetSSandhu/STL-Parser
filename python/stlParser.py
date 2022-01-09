@@ -4,6 +4,16 @@ from face import face as f
 import sys
 import struct
 
+
+def get_file_type(file_name):
+    with open(file_name, 'rb') as stl:
+        line = stl.read(80)
+        if line.startswith(b'solid'):
+            return 'ascii'
+        else:
+            return 'binary'
+    return None
+    
 """
 Given a file name, parse the STL file and return a list of faces.
 """
@@ -49,15 +59,28 @@ def bin_parser_stl(file_name):
             faces.append(f(p(p1[0], p1[1], p1[2]), p(p2[0], p2[1], p2[2]), p(p3[0], p3[1], p3[2]), p(normal[0], normal[1], normal[2])))
     return faces
 
+def extract_faces(file_name):
+    if get_file_type(file_name) == 'ascii':
+        return parse_stl(file_name)
+    elif get_file_type(file_name) == 'binary':
+        return bin_parser_stl(file_name)
+    else:
+        print('Unknown file type')
+        return None
+
+
 if __name__ == '__main__':
     # take command line argument
-    if len(sys.argv) > 1:
-        print("Usage: python3 stlParser.py <file_name> <binary>")
+    if len(sys.argv) != 2:
+        print("Usage: python3 stlParser.py <file_name>")
         exit(1)
     file_name = sys.argv[1]
-    file_type = sys.argv[2] if len(sys.argv) > 2 else 'ascii'
+    file_type = get_file_type(file_name);
     
     if file_type == 'ascii':
         faces = parse_stl(file_name)
-    else:
+    elif file_type == 'binary':
         faces = bin_parser_stl(file_name)
+    else:
+        print("Unknown file type")
+        exit(1)
